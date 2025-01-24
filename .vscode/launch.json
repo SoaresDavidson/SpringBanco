@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "BarApplication",
+            "request": "launch",
+            "mainClass": "com.example.poo.banco.BarApplication",
+            "projectName": "banco"
+        },
+        {
+            "type": "java",
+            "name": "BancoApplication",
+            "request": "launch",
+            "mainClass": "com.example.poo.banco.BancoApplication",
+            "projectName": "banco"
+        }
+    ]
+}
