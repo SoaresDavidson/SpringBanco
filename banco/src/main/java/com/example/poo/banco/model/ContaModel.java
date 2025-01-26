@@ -2,8 +2,6 @@ package com.example.poo.banco.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -17,8 +15,7 @@ import lombok.Setter;
 public class ContaModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "numConta")
+    @Column(name = "num_conta")
     private int numConta;
     
     @Column(name = "cpf")

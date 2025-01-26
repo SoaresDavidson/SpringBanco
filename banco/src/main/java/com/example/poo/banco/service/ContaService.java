@@ -1,5 +1,6 @@
 package com.example.poo.banco.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.example.poo.banco.DTO.ContaDTO;
 import com.example.poo.banco.model.ContaModel;
 import com.example.poo.banco.repository.ContaRepository;
+import com.example.poo.banco.service.exceptions.ContaInexistente;
+import com.example.poo.banco.service.exceptions.ContaJaCadastrada;
 
 import jakarta.transaction.Transactional;
 
@@ -28,18 +31,6 @@ public class ContaService {
         contaRepository.save(conta);
     }
 
-    private ContaDTO convertToDTO(ContaModel contaModel) {
-        ContaDTO contaDTO = new ContaDTO();
-        contaDTO.setNumConta(contaModel.getNumConta());
-        contaDTO.setCpf(contaModel.getCpf());
-        contaDTO.setNomeCliente(contaModel.getNomeCliente());
-        contaDTO.setContaFechada(contaModel.isContaFechada());
-        contaDTO.setValorPago(contaModel.getValorPago());
-        contaDTO.setGorjetaComida(contaModel.getGorjetaComida());
-        contaDTO.setGorjetaBebida(contaModel.getGorjetaBebida());
-        return contaDTO;
-    }
-
     private ContaModel convertToEntity(ContaDTO contaDTO) {
         ContaModel contaModel = new ContaModel();
         contaModel.setNumConta(contaDTO.getNumConta());
@@ -56,6 +47,9 @@ public class ContaService {
         Optional<ContaModel> obj = contaRepository.findById(num_conta);
         return obj.get();
     }
+    public List<ContaModel> findAll(){
+        return contaRepository.findAll();
+    }
 
     public void removeConta(int num_conta) {
         contaRepository.findById(num_conta).orElseThrow(() -> new RuntimeException("Conta não existe!"));
@@ -63,14 +57,16 @@ public class ContaService {
 
     }
 
-    public void addConta(ContaDTO obj) {
+    public void addConta(ContaDTO obj) throws ContaJaCadastrada {
         try {
-            contaRepository.findById(obj.getNumConta()).orElseThrow(() -> new Exception());
-            //throw new Exception();// TODO: criar exceção personalizada
-        } catch (Exception e) {
+            contaRepository.findById(obj.getNumConta())
+                .orElseThrow(() -> new ContaInexistente());
+                throw new ContaJaCadastrada();
+        } catch (ContaInexistente e) {
             ContaModel conta = convertToEntity(obj);
             contaRepository.save(conta);
         }
+        
         
     }
 
@@ -85,7 +81,7 @@ public class ContaService {
                 contaRepository.save(conta);
                 return true;
             }
-            return false; // Account is already closed
+            return false;
         }
         throw new Exception("Conta com num_conta " + num_conta + " não encontrada");
     }

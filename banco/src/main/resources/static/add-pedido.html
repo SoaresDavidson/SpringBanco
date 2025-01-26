@@ -17,7 +17,7 @@
     </form> 
 
     <script>
-        const api_url = "http://localhost:8080/api/pedidos/";
+        const api_url = "http://localhost:8080/";
 
         const form = document.getElementById("pedidoForm");
         form.addEventListener("submit", async function(event) {
@@ -25,11 +25,9 @@
             const num_conta = document.getElementById("conta").value;
             const num_pedido = document.getElementById("pedido").value;
             const quant = document.getElementById("quant").value;
-            console.log(num_conta);
-            console.log(num_pedido);
-            console.log(quant);
+
             try {
-                const response = await fetch(api_url + "add-pedido", {
+                const response = await fetch(api_url + "api/pedidos/add-pedido", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

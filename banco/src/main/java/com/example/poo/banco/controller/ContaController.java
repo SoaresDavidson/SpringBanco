@@ -1,5 +1,7 @@
 package com.example.poo.banco.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.poo.banco.DTO.ContaDTO;
 import com.example.poo.banco.model.ContaModel;
 import com.example.poo.banco.service.ContaService;
+import com.example.poo.banco.service.exceptions.ContaJaCadastrada;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Min;
@@ -32,10 +35,20 @@ public class ContaController {
 
     @PostMapping("/create-conta")
     public ResponseEntity<String> createConta(@RequestBody ContaDTO obj) {
-        contaService.addConta(obj);
+        try {
+            contaService.addConta(obj);
+        } catch (ContaJaCadastrada e) {
+            //e.printStackTrace();
+            return ResponseEntity.badRequest().body("conta já cadastrada!");
+        }
         return ResponseEntity.ok("Conta criada com sucesso");
     }
-
+    @GetMapping()
+    public ResponseEntity<List<ContaModel>> findAll() {
+        List<ContaModel> list = contaService.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+    
     @PutMapping(value = "/{num_conta}/fechar-conta")
     @Transactional
     public ResponseEntity<String> fecharConta(@PathVariable("num_conta") @Min(0) int num_conta) {
