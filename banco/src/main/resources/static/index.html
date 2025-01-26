@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <form id="form">
+        <button id="criar-conta">criar conta</button>
+        <button id="add-pedido">adicionar pedido</button>
+    </form>
+
+</body>
+
+<script>
+    const form = document.getElementById("form")
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Determine which button was clicked
+        const clickedButton = event.submitter; // Button that triggered the event
+        const buttonId = clickedButton.id; // Get the ID of the clicked button
+        console.log(clickedButton)
+        // Navigate based on the button clicked
+        if (buttonId === "criar-conta") {
+            window.location.href = "criar-conta.html";
+        } else if (buttonId === "add-pedido") {
+            window.location.href = "add-pedido.html";
+        }
+    });
+</script>
+</html>

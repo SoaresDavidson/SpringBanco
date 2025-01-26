@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <form id="contaForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required><br><br>
+        <button type="submit">Submit</button>
+    </form> 
+
+    <script>
+        const api_url = "http://localhost:8080/api/contas";
+
+        const form = document.getElementById("contaForm");
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault(); 
+
+            const nome = document.getElementById("nome").value;
+            const cpf = document.getElementById("cpf").value;
+            try {
+                const response = await fetch(api_url + "create-conta", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeCliente: nome, 
+                        cpf: cpf 
+                    })
+                   
+                });
+                if (response.ok) {
+                    const data = response.text();
+                    alert("Conta criada com sucesso!");
+                    console.log(data);
+                } else {
+                    const errorData = response.text();
+                    alert(`Erro: ${errorData.message}`);
+                    console.error(errorData);
+                }
+            } catch (error) {
+                console.error("Erro ao criar conta:", error);
+                alert("Falha ao conectar ao servidor.");
+            }
+        });
+    </script>
+</body>
+</html>

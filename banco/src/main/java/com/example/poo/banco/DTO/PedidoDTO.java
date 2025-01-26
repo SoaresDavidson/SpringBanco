@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PedidoDTO {
+    private int id;
 
     private int num_conta;
 

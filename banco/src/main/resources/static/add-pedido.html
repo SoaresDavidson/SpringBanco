@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <form id="pedidoForm">
+        <label for="conta">conta:</label>
+        <input type="text" id="conta" name="conta" required><br><br>
+        <label for="pedido">pedido:</label>
+        <input type="text" id="pedido" name="pedido" required><br><br>
+        <label for="quant">quantidade:</label>
+        <input type="text" id="quant" name="quant" required><br><br>
+        <button type="submit">Submit</button>
+    </form> 
+
+    <script>
+        const api_url = "http://localhost:8080/api/pedidos/";
+
+        const form = document.getElementById("pedidoForm");
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault(); 
+            const num_conta = document.getElementById("conta").value;
+            const num_pedido = document.getElementById("pedido").value;
+            const quant = document.getElementById("quant").value;
+            console.log(num_conta);
+            console.log(num_pedido);
+            console.log(quant);
+            try {
+                const response = await fetch(api_url + "add-pedido", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "num_conta": num_conta,
+                        "num_pedido": num_pedido, 
+                        "quant": quant 
+                    })
+                   
+                });
+                if (response.ok) {
+                    const data = response.text();
+                    alert("Pedido feito com sucesso!");
+                    console.log(data);
+                } else {
+                    const errorData = response.text();
+                    alert(`Erro: ${errorData.message}`);
+                    console.error(errorData);
+                }
+            } catch (error) {
+                console.error("Erro ao fazer o pedido:", error);
+                alert("Falha ao conectar ao servidor.");
+            }
+        });
+    </script>
+</body>
+</html>

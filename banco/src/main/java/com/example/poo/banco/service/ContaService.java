@@ -10,7 +10,6 @@ import com.example.poo.banco.model.ContaModel;
 import com.example.poo.banco.repository.ContaRepository;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Min;
 
 @Service
 public class ContaService {
