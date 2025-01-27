@@ -42,6 +42,9 @@
                 });
                 if (response.ok) {
                     const data = await response.text();
+                    document.getElementById("conta").value = '';
+                    document.getElementById("pedido").value = '';
+                    document.getElementById("quant").value = '';
                     alert("Pedido feito com sucesso!");
                     console.log(data);
                 } else {
