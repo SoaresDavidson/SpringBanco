@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Extrato da Conta</title>
+</head>
+<body>
+    <h1>Extrato de Conta</h1>
+    <div>
+        <label for="numConta">Número da Conta:</label>
+        <input type="number" id="numConta" required>
+        <button id="gerarExtratoBtn">Gerar Extrato</button>
+        <h2>Extrato:</h2>
+        <pre id="extrato"></pre>
+        <a href="http://localhost:8080" class="comeback"><button type="button">Voltar</button></a>
+    </div>
+    <script>
+        // Função para gerar o extrato
+        document.getElementById("gerarExtratoBtn").addEventListener("click", gerarExtrato);
+
+        async function gerarExtrato() {
+            const numConta = document.getElementById("numConta").value;
+            if (!numConta) {
+                alert("Por favor, insira o número da conta.");
+                return;
+            }
+
+            try {
+                // Chama a API para obter os pedidos da conta
+                const pedidosResponse = await fetch(`http://localhost:8080/api/pedidos/${numConta}`);
+                if (!pedidosResponse.ok) {
+                    throw new Error('Erro ao buscar pedidos para essa conta.');
+                }
+                const pedidos = await pedidosResponse.json();
+
+                let extrato = `Extrato da conta: ${numConta}\n`;
+                let valorTotal = 0;
+
+                for (let pedido of pedidos) {
+                    // Para cada pedido, buscar o item correspondente no menu
+                    const itemResponse = await fetch(`http://localhost:8080/api/menu/${pedido.num_item}`);
+                    if (!itemResponse.ok) {
+                        throw new Error(`Erro ao buscar item com código ${pedido.num_item}`);
+                    }
+                    const item = await itemResponse.json();
+
+                    // Calcular o valor total do pedido
+                    const totalPedido = item.preco * pedido.quant;
+
+                    // Atualizar o extrato
+                    extrato += `Item: ${item.nome} | Quantidade: ${pedido.quant} | Preço: R$ ${item.preco.toFixed(2)} | Total: R$ ${totalPedido.toFixed(2)}\n`;
+
+                    // Acumular o valor total
+                    valorTotal += totalPedido;
+                }
+
+                // Mostrar o extrato na página
+                extrato += `\nValor Total: R$ ${valorTotal.toFixed(2)}`;
+                document.getElementById("extrato").textContent = extrato;
+
+            } catch (error) {
+                console.error(error);
+                alert("Ocorreu um erro ao gerar o extrato.");
+            }
+        }
+    </script>
+    
+</body>
+</html>

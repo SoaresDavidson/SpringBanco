@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Welcome</title>
 </head>
 <body>
+    <header>
+        <h1 class="titulo">Seja bem-vindo!</h1>
+    </header>
+    <p>Selecione uma opção abaixo</p>
     <form id="form">
         <button id="criar-conta">criar conta</button>
         <button id="add-pedido">adicionar pedido</button>
+        <button id="add-item">adicionar item</button>
+        <button id="listar-pedidos">listar pedidos</button>
     </form>
 
 </body>
@@ -27,6 +34,10 @@
             window.location.href = "criar-conta.html";
         } else if (buttonId === "add-pedido") {
             window.location.href = "add-pedido.html";
+        }else if (buttonId === "add-item") {
+            window.location.href = "add-item.html";
+        } else if (buttonId === "listar-pedidos") {
+            window.location.href = "listar-pedidos.html";
         }
     });
 </script>

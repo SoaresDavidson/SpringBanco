@@ -42,12 +42,17 @@ public class MenuService {
     }
 
     public void addItem(MenuDTO obj) {
-        try {
-            menuRepository.findById(obj.getNum()).orElseThrow(() -> new Exception());
-        } catch (Exception e) {
-            MenuModel menu = convertToEntity(obj);
-            menuRepository.save(menu);
+        // Verifique se já existe um item com o mesmo código (num)
+        Optional<MenuModel> existingMenu = menuRepository.findById(obj.getNum());
+        
+        // Se já existir, lançar uma exceção ou retornar erro
+        if (existingMenu.isPresent()) {
+            throw new RuntimeException("Item com o código " + obj.getNum() + " já existe no banco de dados!");
         }
         
+        // Se não existir, criar e salvar o novo item
+        MenuModel menu = convertToEntity(obj);
+        menuRepository.save(menu);
     }
+    
 }

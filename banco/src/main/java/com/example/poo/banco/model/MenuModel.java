@@ -16,7 +16,6 @@ import lombok.Setter;
 public class MenuModel {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "num")
     private int num;
 

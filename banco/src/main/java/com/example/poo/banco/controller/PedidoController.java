@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.poo.banco.DTO.PedidoDTO;
+import com.example.poo.banco.model.PedidoModel;
 import com.example.poo.banco.service.PedidoService;
-
-
+import com.example.poo.banco.repository.PedidoRepository;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,6 +25,9 @@ public class PedidoController {
     @Autowired
     PedidoService pedidoService;
 
+    @Autowired
+    PedidoRepository pedidoRepository;
+
     @PostMapping("/add-pedido")
     public ResponseEntity<String> addPedido(@RequestBody PedidoDTO obj) {
         try {
@@ -30,6 +36,11 @@ public class PedidoController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{numConta}")
+    public List<PedidoModel> getPedidosByNumConta(@PathVariable int numConta) {
+        return pedidoRepository.findByNumConta(numConta);  // Supondo que o método já existe no PedidoRepository
     }
     
 }
